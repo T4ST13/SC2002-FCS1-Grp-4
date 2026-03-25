@@ -1,5 +1,4 @@
 package domain.combatant;
-// IMPORTANT: some things need to swap from base to eff stats (marked below)
 
 // Shared by both Player & Enemy
 public abstract class Combatant {
@@ -10,25 +9,37 @@ public abstract class Combatant {
     private final int speed;
 
     private int currentHP;
+    private int attackModifier;
+    private int defenseModifier;
 
     /* == Constructor for combatant == */
     protected Combatant (String name, int maxHP, int baseAttack, int baseDefense, int speed) {
+        // Base Stats
         this.name = name;
         this.maxHP = maxHP;
         this.baseAttack = baseAttack;
         this.baseDefense = baseDefense;
         this.speed = speed;
+
         this.currentHP = maxHP; // Starts at max HP
+        this.attackModifier = 0;
+        this.defenseModifier = 0;
     }
     
+    /* == Useful Checks == */
+    public abstract boolean isPlayerControlled();
 
-    /* == Get Base Stats == */
     public String getName() {
         return name;
     }
 
+    /* == Get Base Stats == */
     public int getMaxHp() {
         return maxHP;
+    }
+
+    public int getCurrentHp() {
+        return currentHP;
     }
 
     public int getBaseAttack() {
@@ -43,6 +54,22 @@ public abstract class Combatant {
         return speed;
     }
 
+    /* == Get Effective Stats (Base + Temp Modifiers) */
+    public int getAttack() {
+        return baseAttack + attackModifier;
+    }
+
+    public int getDefense() {
+        return baseDefense + defenseModifier;
+    }
+
+    public int getAttackModifier() {
+        return attackModifier;
+    }
+
+    public int getDefenseModifier() {
+        return defenseModifier;
+    }
 
     /*  == Battle State == */
     // Check if dead or alive
@@ -56,6 +83,8 @@ public abstract class Combatant {
         return Math.max(0, this.baseAttack - target.baseDefense); // Swap base to eff
     }
 
+    // Update health from taking damage
+    // Probably update, rn only looks at raw base damage
     public void takeDamage(int damage) {
         if (damage < 0) {       // If DEF gd enough, take 0 dmg
             damage = 0;

@@ -15,6 +15,11 @@ public abstract class Player extends Combatant {
             this.specialSkillCooldown = 0;
     }
 
+    @Override
+    public final boolean isPlayerControlled() {
+        return true;
+    }
+
     /* == Get special skills info == */
     public String getSpecialSkillName() {
         return specialSkillName;
@@ -37,7 +42,7 @@ public abstract class Player extends Combatant {
     }
 
     // Call below after player's turn
-    public void decreaseCooldown() {
+    public void decreaseSkillCooldown() {
         if (specialSkillCooldown > 0) {
             specialSkillCooldown--;
         }
