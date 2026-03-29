@@ -1,5 +1,5 @@
 package domain.combatant;
-
+// test
 // Shared by both Player & Enemy
 public abstract class Combatant {
     private final String name;
