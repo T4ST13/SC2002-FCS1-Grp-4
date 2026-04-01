@@ -1,5 +1,5 @@
 package domain.combatant;
-// test
+
 // Shared by both Player & Enemy
 public abstract class Combatant {
     private final String name;
@@ -54,13 +54,37 @@ public abstract class Combatant {
         return speed;
     }
 
+
+    /* == Get Temp Stats Modifier */
+    public void addAttackModifier(int amount) {
+        attackModifier += amount;
+    }
+
+    public void addDefenseModifier(int amount) {
+        defenseModifier += amount;
+    }
+
+    public void clearAttackModifier() {     // Reset atk boost
+        attackModifier = 0;
+    }
+
+    public void clearDefenseModifier() {    // Reset def boost
+        defenseModifier = 0;
+    }
+
+    public void resetStatModifiers() {      // Reset all stats gained
+        attackModifier = 0;
+        defenseModifier = 0;
+    }
+
+
     /* == Get Effective Stats (Base + Temp Modifiers) */
     public int getAttack() {
-        return baseAttack + attackModifier;
+        return Math.max(0, baseAttack + attackModifier);
     }
 
     public int getDefense() {
-        return baseDefense + defenseModifier;
+        return Math.max(0, baseDefense + defenseModifier);
     }
 
     public int getAttackModifier() {
@@ -78,9 +102,10 @@ public abstract class Combatant {
     }
 
     // Calc Dmg Formula
+    // Uses getAtk or Def to use effective stats
     public int calcDamage(Combatant target) {
-        // If DEF gd enough, will take 0 dmg
-        return Math.max(0, this.baseAttack - target.baseDefense); // Swap base to eff
+        // Why max? If DEF gd enough, will take 0 dmg
+        return Math.max(0, this.getAttack() - target.getDefense()); // Swap base to eff
     }
 
     // Update health from taking damage
