@@ -109,7 +109,6 @@ public abstract class Combatant {
     }
 
     // Update health from taking damage
-    // Probably update, rn only looks at raw base damage
     public void takeDamage(int damage) {
         if (damage < 0) {       // If DEF gd enough, take 0 dmg
             damage = 0;
@@ -140,11 +139,11 @@ public abstract class Combatant {
         currentHP = maxHP;
     }
 
-    // In future swap base atk to like effective atk (to create, so can account for modifiers (buffs))
-    @Override public String toString() {
+    @Override 
+    public String toString() {
         return name + " [HP = " + currentHP + "/" + maxHP 
-        + ", ATK = " + baseAttack
-        + ", DEF = " + baseDefense
+        + ", ATK = " + getAttack()
+        + ", DEF = " + getDefense()
         + ", SPD = " + speed + "]"; 
     }
 }
