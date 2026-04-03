@@ -38,13 +38,13 @@ public class Action {
 
         // Activate action
         actionLogic.activate(user, target);
+    }
 
-        @Override 
-        public String toString() {
-            return "Action [Name =" + getName() 
-            + ", User =" + user.getName()
-            + ", selfTarget =" + actionLogic.isSelfTarget()
-            + ", endTurn =" + actionLogic.isEndTurn() +"]";
-        }
+    @Override 
+    public String toString() {
+        return "Action [Name =" + getName() 
+        + ", User =" + user.getName()
+        + ", selfTarget =" + actionLogic.isSelfTarget()
+        + ", endTurn =" + actionLogic.isEndTurn() +"]";
     }
 }

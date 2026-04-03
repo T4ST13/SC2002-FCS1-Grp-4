@@ -2,9 +2,12 @@ package domain.actionlogic;
 
 // Need to import classes since we using protected
 import domain.combatant.Combatant;
-import domain.combatant.Player;
 
 public abstract class ActionLogic {
+    public enum TargetMode {
+        SELF, SINGLE, AOE
+    }
+
     private final String name;
     private final boolean selfTarget;
     private final boolean endTurn;
@@ -20,6 +23,7 @@ public abstract class ActionLogic {
         return name;
     }
 
+    // Note: Lowkey with targetmode this may be abit redundant
     public boolean isSelfTarget() {
         return selfTarget;
     }
@@ -33,6 +37,9 @@ public abstract class ActionLogic {
     }
 
     /* == The Action (override in subclasses) == */
+    // Getting the Correct Target Mode
+    public abstract TargetMode getTargetMode();
+    
     public abstract void activate(Combatant user, Combatant target);
 }
 

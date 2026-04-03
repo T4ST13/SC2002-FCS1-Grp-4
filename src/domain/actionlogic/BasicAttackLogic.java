@@ -8,6 +8,11 @@ public class BasicAttackLogic extends ActionLogic {
     }
 
     @Override
+    public TargetMode getTargetMode() {
+        return TargetMode.SINGLE;
+    }
+
+    @Override
     // TO DO: Add checks (e.g. if user is alive)
     public void activate(Combatant user, Combatant target) {
         // Action

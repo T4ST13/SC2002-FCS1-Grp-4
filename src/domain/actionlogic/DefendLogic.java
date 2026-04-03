@@ -7,6 +7,11 @@ public class DefendLogic extends ActionLogic {
         super("Defend", true, true); // follows super: ActionLogic(name, selfTarget, endTurn)
     }
 
+    @Override
+    public TargetMode getTargetMode() {
+        return TargetMode.SELF;
+    }
+
      @Override
     // TO DO: Add checks (e.g. if user is alive)
     public void activate(Combatant user, Combatant target) {

@@ -1,4 +1,4 @@
-// Use for testing if everyt working
+// Use to test combatant class & subclasses
 
 import domain.combatant.Combatant;
 import domain.combatant.Goblin;
