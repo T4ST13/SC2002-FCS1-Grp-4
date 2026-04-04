@@ -8,6 +8,7 @@ import domain.statuseffect.StunEffect;
 
 public class ShieldBashLogic extends SkillLogic {
     private static final int BASE_COOLDOWN = 3;
+    private static final int STUN_DURATION = 2;
 
     public ShieldBashLogic() {
         super("Shield Bash", false, true, BASE_COOLDOWN);

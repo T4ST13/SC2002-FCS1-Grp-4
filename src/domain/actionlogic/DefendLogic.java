@@ -5,6 +5,8 @@ import domain.statuseffect.DefendEffect;
 import domain.statuseffect.StatusEffect;
 
 public class DefendLogic extends ActionLogic {
+    private static final int DURATION = 2;
+    
     public DefendLogic() {
         super("Defend", true, true); // follows super: ActionLogic(name, selfTarget, endTurn)
     }

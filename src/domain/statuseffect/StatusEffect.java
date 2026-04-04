@@ -1,7 +1,6 @@
 package domain.statuseffect;
 
 import domain.combatant.Combatant;
-import domain.statuseffectlogic.StatusEffectLogic;
 
 public class StatusEffect {
     public static final int PERMANENT_DURATION = -1; // for permanent effects, e.g. arcane blast gives perma +5 ATK

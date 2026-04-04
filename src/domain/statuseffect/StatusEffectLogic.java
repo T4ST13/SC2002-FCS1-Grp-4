@@ -1,4 +1,4 @@
-package domain.statuseffectlogic;
+package domain.statuseffect;
 
 import domain.combatant.Combatant;
 import domain.statuseffect.StatusEffect.TickPhase;

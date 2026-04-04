@@ -15,8 +15,8 @@ public abstract class Combatant {
     private final int speed;
 
     private int currentHP;
-    private int attackModifier;
-    private int defenseModifier;
+    //private int attackModifier;
+    //private int defenseModifier;
     private final List<StatusEffect> activeStatusEffects;
 
     /* == Constructor for combatant == */
@@ -29,8 +29,8 @@ public abstract class Combatant {
         this.speed = speed;
 
         this.currentHP = maxHP; // Starts at max HP
-        this.attackModifier = 0;
-        this.defenseModifier = 0;
+        //this.attackModifier = 0;
+        //this.defenseModifier = 0;
         this.activeStatusEffects = new ArrayList<>();
     }
     
