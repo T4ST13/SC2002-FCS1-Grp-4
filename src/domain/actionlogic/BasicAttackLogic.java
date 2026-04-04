@@ -17,6 +17,6 @@ public class BasicAttackLogic extends ActionLogic {
     public void activate(Combatant user, Combatant target) {
         // Action
         int damage = user.calcDamage(target);
-        target.takeDamage(damage);
+        target.takeDamageFrom(user, damage);
     }
 }

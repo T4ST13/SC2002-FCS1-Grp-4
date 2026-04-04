@@ -4,6 +4,8 @@ import java.util.List;
 import domain.combatant.Combatant;
 import domain.combatant.Player;
 import domain.combatant.Wizard;
+import domain.statuseffect.ArcaneBlastEffect;
+import domain.statuseffect.StatusEffect;
 
 public class ArcaneBlastLogic extends SkillLogic {
     private static final int BASE_COOLDOWN = 3;
@@ -36,10 +38,10 @@ public class ArcaneBlastLogic extends SkillLogic {
         for (Combatant enemy : enemyTargets) {
             if (enemy != null && enemy.isAlive()) {
                 int damage = user.calcDamage(enemy);
-                enemy.takeDamage(damage);
+                enemy.takeDamageFrom(user, damage);
 
                 if (!enemy.isAlive()) {
-                    user.addAttackModifier(KILL_BONUS_ATK);
+                    user.addStatusEffect(new StatusEffect(user, new ArcaneBlastEffect(KILL_BONUS_ATK), StatusEffect.PERMANENT_DURATION));
                 }
             }
         }

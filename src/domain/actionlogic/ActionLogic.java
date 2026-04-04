@@ -33,7 +33,7 @@ public abstract class ActionLogic {
     }
 
     public boolean isAvailable(Combatant user) {
-        return user != null && user.isAlive();
+        return user != null && user.isAlive() && user.canAct();
     }
 
     /* == The Action (override in subclasses) == */

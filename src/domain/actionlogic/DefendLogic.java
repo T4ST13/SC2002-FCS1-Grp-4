@@ -1,6 +1,8 @@
 package domain.actionlogic;
 
 import domain.combatant.Combatant;
+import domain.statuseffect.DefendEffect;
+import domain.statuseffect.StatusEffect;
 
 public class DefendLogic extends ActionLogic {
     public DefendLogic() {
@@ -16,6 +18,6 @@ public class DefendLogic extends ActionLogic {
     // TO DO: Add checks (e.g. if user is alive)
     public void activate(Combatant user, Combatant target) {
         // Action
-        user.addDefenseModifier(10); // placeholder no., in future whatever gives def boost update var name in () to match 
+        user.addStatusEffect(new StatusEffect(user, new DefendEffect(), DURATION)); 
     }
 }
