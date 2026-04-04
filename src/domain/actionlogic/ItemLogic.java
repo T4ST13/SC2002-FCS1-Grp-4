@@ -3,16 +3,9 @@ package domain.actionlogic;
 import domain.combatant.Combatant;
 import domain.combatant.Player;
 
-public abstract class SkillLogic extends ActionLogic {
-    private final int baseCooldown;
-
-    protected SkillLogic(String name, boolean selfTarget, boolean endTurn, int baseCooldown) {
+public class ItemLogic {
+    protected ItemLogic(String name, boolean selfTarget, boolean endTurn) {
         super(name, selfTarget, endTurn);
-        this.baseCooldown = baseCooldown;
-    }
-
-    public int getBaseCooldown() {
-        return baseCooldown;
     }
 
     @Override
@@ -20,11 +13,24 @@ public abstract class SkillLogic extends ActionLogic {
         return super.isAvailable(user) && user instanceof Player;
     }
 
-    /* == Check if skills interacting with correct targets */
+    /* == Check if item used by correct user == */
     protected Player requirePlayerUser(Combatant user) {
-        if (!(user instanceof Player)) {
-            throw new IllegalArgumentException("Only player-controlled combatants can use skills.");
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null.");
         }
+
+        if (!user.isAlive()) {
+            throw new IllegalArgumentException("Defeated combatants cannot act.");
+        }
+
+        if (!user.canAct()) {
+            throw new IllegalStateException(user.getName() + " cannot act right now.");
+        }
+
+        if (!(user instanceof Player)) {
+            throw new IllegalArgumentException("Only player-controlled combatants can use items.");
+        }
+
         return (Player) user;
     }
 

@@ -31,9 +31,5 @@ public class ShieldBashLogic extends SkillLogic {
         int damage = user.calcDamage(target);
         target.addStatusEffect(new StatusEffect(target, new StunEffect(), STUN_DURATION));
         target.takeDamageFrom(user, damage);
-
-        player.startSpecialSkillCooldown();
-
-        // TO DO: Add stun logic after status effect system is implemented.
     }
 }

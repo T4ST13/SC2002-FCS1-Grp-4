@@ -1,18 +1,13 @@
 package domain.combatant;
 
+import domain.actionlogic.Skill;
+
 public abstract class Player extends Combatant {
-    private final String specialSkillName;
-    private final String specialSkillDescription;
-    private int specialSkillCooldown;
+    private Skill specialSkill;
 
     /* == Constructor for player classes == */
-    protected Player (
-        String name, int maxHP, int baseAttack, int baseDefense, int speed,
-        String specialSkillName, String specialSkillDescription, int specialSkillCooldown) {
+    protected Player (String name, int maxHP, int baseAttack, int baseDefense, int speed) {
             super(name, maxHP, baseAttack, baseDefense, speed);
-            this.specialSkillName = specialSkillName;
-            this.specialSkillDescription = specialSkillDescription;
-            this.specialSkillCooldown = 0;
     }
 
     @Override
@@ -20,35 +15,39 @@ public abstract class Player extends Combatant {
         return true;
     }
 
-    /* == Get special skills info == */
+    /* == Special Skills == */
+    // Holds skill as obj
+    protected void setSpecialSkill(Skill speciaSkill) {
+        this.specialSkill = speciaSkill;
+    }
+
+    // Special Skills Getters
     public String getSpecialSkillName() {
-        return specialSkillName;
+        return specialSkill.getName();
     }
 
     public String getSpecialSkillDescription() {
-        return specialSkillDescription;
+        return specialSkill.getDescription();
     }
 
     public int getSpecialSkillCooldown() {
-        return specialSkillCooldown;
+        return specialSkill.getRemainingCooldown();
     }
 
     public boolean canUseSpecial() {
-        return specialSkillCooldown == 0;
+        return specialSkill.canUse();
     }
 
-    public void startSpecialSkillCooldown() {   // Use after SS used
-        specialSkillCooldown = 3;               // Set cd to 3 turns
-    }
-
-    // Call below after player's turn
+    // Call at end of player's turn
     public void decreaseSkillCooldown() {
-        if (specialSkillCooldown > 0) {
-            specialSkillCooldown--;
+        if (specialSkill != null) {
+            specialSkill.changeRemainingCooldown(-1);
         }
     }
 
     public void resetCooldown() {
-        specialSkillCooldown = 0;
-    }
+        if (specialSkill != null) {
+            specialSkill.resetCooldown();
+        }
+    }  
 }

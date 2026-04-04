@@ -1,11 +1,11 @@
 package domain.actionlogic;
 
-import java.util.List;
 import domain.combatant.Combatant;
 import domain.combatant.Player;
 import domain.combatant.Wizard;
 import domain.statuseffect.ArcaneBlastEffect;
 import domain.statuseffect.StatusEffect;
+import java.util.List;
 
 public class ArcaneBlastLogic extends SkillLogic {
     private static final int BASE_COOLDOWN = 3;
@@ -45,7 +45,5 @@ public class ArcaneBlastLogic extends SkillLogic {
                 }
             }
         }
-
-        player.startSpecialSkillCooldown();
     }
 }
