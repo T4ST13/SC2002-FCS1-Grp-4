@@ -1,183 +1,107 @@
 package domain.combatant;
 
+import domain.TurnBasedCount;
+import domain.action.Action;
+import domain.actionlogic.BasicAttackLogic;
 import domain.statuseffect.StatusEffect;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import domain.CombatStat;
+
+import java.util.*;
 
 // Shared by both Player & Enemy
-public abstract class Combatant {
+public abstract class Combatant implements Comparable<Combatant>{
     private final String name;
-    private final int maxHP;
-    private final int baseAttack;
-    private final int baseDefense;
-    private final int speed;
-
+    private final HashMap<CombatStat, Integer> baseStats = new HashMap<CombatStat, Integer>();//HashMap doesn't accept primitive types (int -> Integer)
     private int currentHP;
-    //private int attackModifier;
-    //private int defenseModifier;
-    private final List<StatusEffect> activeStatusEffects;
+    private boolean active;//default = true, false if stunned. reset to true every turn and check again for stun
+    private boolean invulnerable;//default = false, true if used smoke bomb. reset to false every turn
+    private List<StatusEffect> statusList;
+    private List<Action> actionList;
+    private int actionMeter;
 
     /* == Constructor for combatant == */
-    protected Combatant (String name, int maxHP, int baseAttack, int baseDefense, int speed) {
-        // Base Stats
+    protected Combatant (String name, int baseHP, int baseAtk, int baseDef, int baseSpd) {
         this.name = name;
-        this.maxHP = maxHP;
-        this.baseAttack = baseAttack;
-        this.baseDefense = baseDefense;
-        this.speed = speed;
-
-        this.currentHP = maxHP; // Starts at max HP
-        //this.attackModifier = 0;
-        //this.defenseModifier = 0;
-        this.activeStatusEffects = new ArrayList<>();
+        baseStats.put(CombatStat.HP, baseHP);
+        baseStats.put(CombatStat.ATK, baseAtk);
+        baseStats.put(CombatStat.DEF, baseDef);
+        baseStats.put(CombatStat.SPD, baseSpd);
+        this.currentHP = baseHP; // Starts at max HP
+        this.active = true;
+        this.invulnerable = false;
+        this.statusList = new ArrayList<>();
+        this.actionList = new ArrayList<>();
+        this.actionList.add(new Action(this, new BasicAttackLogic()));//all subclasses of combatants can use basic attack
+        this.actionMeter = 0;
     }
     
     /* == Useful Checks == */
-    public abstract boolean isPlayerControlled();
-
     public String getName() {
         return name;
     }
 
-    /* == Get Base Stats == */
-    public int getMaxHp() {
-        return maxHP;
+    /* == Getter == */
+    public int getStat(CombatStat stat){
+        int finalStat = baseStats.get(stat);
+        for (StatusEffect effect : statusList){
+            if (effect.getEffectLogic().getRelatedStat() == stat){
+                finalStat += effect.getEffectLogic().getStatChange();
+            }
+        }
+        return finalStat;
     }
 
-    public int getCurrentHp() {
-        return currentHP;
+    public List<Action> getActionList(){
+        return this.actionList;
     }
 
-    public int getBaseAttack() {
-        return baseAttack;
+    public int getActionMeter(){
+        return this.actionMeter;
     }
 
-    public int getBaseDefense() {
-        return baseDefense;
+    public boolean canAct(){
+        return this.active;
     }
 
-    public int getSpeed() {
-        return speed;
+    public void setActive(boolean active){
+        this.active = active;
     }
 
-
-    /* == Get Temp Stats Modifier 
-    Commented for now, swapped to status effect
-
-    public void addAttackModifier(int amount) {
-        attackModifier += amount;
+    public boolean isInvulnerable(){
+        return this.invulnerable;
     }
 
-    public void addDefenseModifier(int amount) {
-        defenseModifier += amount;
+    public void setInvulnerable(boolean invulnerable){
+        this.invulnerable = invulnerable;
     }
-
-    public void clearAttackModifier() {     // Reset atk boost
-        attackModifier = 0;
-    }
-
-    public void clearDefenseModifier() {    // Reset def boost
-        defenseModifier = 0;
-    }
-
-    public void resetStatModifiers() {      // Reset all stats gained
-        attackModifier = 0;
-        defenseModifier = 0;
-    } */
 
     /* == Status Effects == */
     public void addStatusEffect(StatusEffect effect) {
-        activeStatusEffects.add(effect);
+        this.statusList.add(effect);
     }
 
-    public List<StatusEffect> getActiveStatusEffects() {
-        return Collections.unmodifiableList(activeStatusEffects);
-    }
-
-    public void clearStatusEffects() {
-        activeStatusEffects.clear();
-    }
-
-    public void onTurnStart() {
-        for (StatusEffect effect : activeStatusEffects) {
-            effect.onTurnStart();
+    public void activateAllEffects() {
+        for (StatusEffect effect : this.statusList){
+            effect.trigger(this);
         }
-        removeExpiredStatusEffects();
     }
 
-    public void onTurnEnd() {
-        for (StatusEffect effect : activeStatusEffects) {
-            effect.onTurnEnd();
+    public void finishTurn(){
+        int i = 0;
+        while (i < this.statusList.size()){
+            this.statusList.get(i).passTurn();
+            if (this.statusList.get(i).getRemainingTs() == 0){
+                this.statusList.remove(i);//get rid of expired status effects
+                i--;
+            }
+            i++;
         }
-        removeExpiredStatusEffects();
-    }
-
-    private void removeExpiredStatusEffects() {
-        Iterator<StatusEffect> iterator = activeStatusEffects.iterator();
-
-        while (iterator.hasNext()) {
-            if (iterator.next().isExpired()) {
-                iterator.remove();
+        for (Action action : this.actionList){
+            if (action instanceof TurnBasedCount){
+                ((TurnBasedCount) action).passTurn();//update skill cooldown
             }
         }
     }
-
-    public boolean canAct() {
-        for (StatusEffect effect : activeStatusEffects) {
-            if (effect.preventsAction()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-    /* == Get Effective Stats (Base + Status Effects) */
-    private int getStatusAtkBonus() {
-        int totalBonus = 0;
-
-        for (StatusEffect effect : activeStatusEffects) {
-            totalBonus += effect.getAttackBonus();
-        }
-
-        return totalBonus;
-    }
-
-    private int getStatusDefBonus() {
-        int totalBonus = 0;
-
-        for (StatusEffect effect : activeStatusEffects) {
-            totalBonus += effect.getDefenseBonus();
-        }
-
-        return totalBonus;
-    }
-
-    public int getAttack() {
-        return Math.max(0, baseAttack + getStatusAtkBonus());
-    }
-
-    public int getDefense() {
-        return Math.max(0, baseDefense + getStatusDefBonus());
-    }
-
-    // Apply Damage
-    public int applyIncomingDmgMod(Combatant attacker, int incomingDamage) {
-        int modifiedDamage = incomingDamage;
-
-        for (StatusEffect effect : activeStatusEffects) {
-            modifiedDamage = effect.modifyIncomingDamage(attacker, modifiedDamage);
-        }
-
-        return Math.max(0, modifiedDamage);
-    }
-
-    public void takeDamageFrom(Combatant attacker, int damage) {
-        takeDamage(applyIncomingDmgMod(attacker, damage));
-    }
-
 
     /*  == Battle State == */
     // Check if dead or alive
@@ -189,46 +113,25 @@ public abstract class Combatant {
     // Uses getAtk or Def to use effective stats
     public int calcDamage(Combatant target) {
         // Why max? If DEF gd enough, will take 0 dmg
-        return Math.max(0, this.getAttack() - target.getDefense()); // Swap base to eff
+        return Math.max(0, this.getStat(CombatStat.ATK) - target.getStat(CombatStat.DEF));
     }
 
     // Update health from taking damage
     public void takeDamage(int damage) {
-        if (damage < 0) {       // If DEF gd enough, take 0 dmg
-            damage = 0;
-        }
-
-        currentHP -= damage;
-
-        if (currentHP < 0) {    // If they die, update hp to 0
-            currentHP = 0;
-        }
+        this.currentHP = Math.max(0, this.currentHP-damage);
     }
 
     // Healing
     public void heal(int amount) {
-        if (amount < 0) {           // If heals somehow < 0, wont anyhow minus
-            amount = 0;
-        }
-
-        currentHP += amount;
-
-        if (currentHP > maxHP) {    // Prevent overheals / overcap health
-            currentHP = maxHP;
-        }
+        this.currentHP = Math.min(this.getStat(CombatStat.HP), this.currentHP + amount);
     }
 
-    /* == Useful for Restarts == */
-    public void resetHp() {
-        currentHP = maxHP;
+    public void takeAction(int actionIndex, Combatant target) {
+        this.actionList.get(actionIndex).trigger(target);
     }
 
-    @Override 
-    public String toString() {
-        return name + " [HP = " + currentHP + "/" + maxHP 
-        + ", ATK = " + getAttack()
-        + ", DEF = " + getDefense()
-        + ", SPD = " + speed 
-        + ", canAct = " + canAct() + "]"; 
+    @Override
+    public int compareTo(Combatant other){
+        return this.getStat(CombatStat.SPD) - other.getStat(CombatStat.SPD);
     }
 }

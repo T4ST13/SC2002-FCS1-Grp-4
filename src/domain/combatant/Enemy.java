@@ -1,13 +1,11 @@
 package domain.combatant;
 
+import domain.action.Action;
+import domain.actionlogic.DefendLogic;
+
 public abstract class Enemy extends Combatant {
     /* == Constructor for enemy classes == */
-    protected Enemy (String name, int maxHP, int baseAttack, int baseDefense, int speed) {
-            super(name, maxHP, baseAttack, baseDefense, speed);
-    }
-
-    @Override
-    public final boolean isPlayerControlled() {
-        return false;
+    protected Enemy(String name, int baseHP, int baseAtk, int baseDef, int baseSpd) {
+        super(name, baseHP, baseAtk, baseDef, baseSpd);
     }
 }

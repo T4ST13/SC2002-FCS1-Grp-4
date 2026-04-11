@@ -1,25 +1,15 @@
 package domain.actionlogic;
 
-import domain.combatant.Combatant;
-import domain.statuseffect.DefendEffect;
-import domain.statuseffect.StatusEffect;
+import domain.statuseffectlogic.StatusEffectLogic;
+import domain.statuseffectlogic.DefendEffect;
 
 public class DefendLogic extends ActionLogic {
-    private static final int DURATION = 2;
-    
+    private static final String NAME = "Defend";
+    private static final boolean CONSUME_TURN = true;//basic attacks consume turn
+    private static final StatusEffectLogic EFFECT_LOGIC = new DefendEffect();
+    private static final int MAX_TARGET = 1;
+    private static final boolean EFFECT_SELF = true;
     public DefendLogic() {
-        super("Defend", true, true); // follows super: ActionLogic(name, selfTarget, endTurn)
-    }
-
-    @Override
-    public TargetMode getTargetMode() {
-        return TargetMode.SELF;
-    }
-
-     @Override
-    // TO DO: Add checks (e.g. if user is alive)
-    public void activate(Combatant user, Combatant target) {
-        // Action
-        user.addStatusEffect(new StatusEffect(user, new DefendEffect(), DURATION)); 
+        super(NAME, CONSUME_TURN, EFFECT_LOGIC, MAX_TARGET, EFFECT_SELF);
     }
 }

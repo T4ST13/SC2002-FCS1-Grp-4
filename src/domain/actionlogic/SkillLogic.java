@@ -1,40 +1,16 @@
 package domain.actionlogic;
 
-import domain.combatant.Combatant;
-import domain.combatant.Player;
+import domain.statuseffectlogic.StatusEffectLogic;
 
 public abstract class SkillLogic extends ActionLogic {
-    private final int baseCooldown;
+    private static final boolean CONSUME_TURN = true;//consumeTurn fixed to true for all skills
+    private static final int BASE_COOLDOWN = 3;//cd fixed to 3 for all skills (need to change if new skills have unique cd)
 
-    protected SkillLogic(String name, boolean selfTarget, boolean endTurn, int baseCooldown) {
-        super(name, selfTarget, endTurn);
-        this.baseCooldown = baseCooldown;
+    protected SkillLogic(String name, StatusEffectLogic effectLogic, int maxTarget, boolean effectSelf) {
+        super(name, CONSUME_TURN, effectLogic, maxTarget, effectSelf);
     }
 
     public int getBaseCooldown() {
-        return baseCooldown;
-    }
-
-    @Override
-    public boolean isAvailable(Combatant user) {
-        return super.isAvailable(user) && user instanceof Player;
-    }
-
-    /* == Check if skills interacting with correct targets */
-    protected Player requirePlayerUser(Combatant user) {
-        if (!(user instanceof Player)) {
-            throw new IllegalArgumentException("Only player-controlled combatants can use skills.");
-        }
-        return (Player) user;
-    }
-
-    protected void validateTarget(Combatant target) {
-        if (target == null) {
-            throw new IllegalArgumentException("Target cannot be null.");
-        }
-
-        if (!target.isAlive()) {
-            throw new IllegalArgumentException("Cannot target a defeated combatant.");
-        }
+        return BASE_COOLDOWN;
     }
 }

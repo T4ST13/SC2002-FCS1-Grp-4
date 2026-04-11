@@ -1,38 +1,14 @@
 package domain.actionlogic;
 
-import domain.combatant.Combatant;
-import domain.combatant.Player;
+import domain.statuseffectlogic.StatusEffectLogic;
 
 public class PowerStoneLogic extends ItemLogic {
-    private final SkillLogic specialSkillLogic;
+    private static final String NAME = "Power Stone";
+    private static final StatusEffectLogic EFFECT_LOGIC = null;//power stone does not incur a status effect byitself
+    private static final int MAX_TARGET = -1;//maxTarget = -1 means self target
+    private static final boolean EFFECT_SELF = false;// separate status effect
 
-    public PowerStoneLogic(SkillLogic specialSkillLogic) {
-        super("Power Stone", false, true);
-
-        if (specialSkillLogic == null) {
-            throw new IllegalArgumentException("Power Stone requires a valid special skill logic.");
-        }
-
-        this.specialSkillLogic = specialSkillLogic;
-    }
-
-    @Override
-    public TargetMode getTargetMode() {
-        return specialSkillLogic.getTargetMode();
-    }
-
-    @Override
-    public void activate(Combatant user, Combatant target) {
-        Player player = requirePlayerUser(user);
-
-        // Validate target only when delegated skill actually needs one
-        if (specialSkillLogic.getTargetMode() == TargetMode.SINGLE) {
-            validateTarget(target);
-        }
-
-        int originalCooldown = player.getSpecialSkillCooldown();
-
-        // Reuse the actual skill logic
-        specialSkillLogic.activate(user, target);
+    public PowerStoneLogic(){
+        super(NAME, EFFECT_LOGIC, MAX_TARGET, EFFECT_SELF);
     }
 }

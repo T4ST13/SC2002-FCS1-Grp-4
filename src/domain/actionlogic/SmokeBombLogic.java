@@ -1,26 +1,15 @@
 package domain.actionlogic;
 
-import domain.combatant.Combatant;
-import domain.statuseffect.SmokeBombEffect;
-import domain.statuseffect.StatusEffect;
+import domain.statuseffectlogic.SmokeInvEffect;
+import domain.statuseffectlogic.StatusEffectLogic;
 
 public class SmokeBombLogic extends ItemLogic {
-    private static final int DURATION = 2;
+    private static final String NAME = "Smoke Bomb";
+    private static final StatusEffectLogic EFFECT_LOGIC = new SmokeInvEffect();//smoke bomb invulnerability = smoke bomb effect?
+    private static final int MAX_TARGET = -1;
+    private static final boolean EFFECT_SELF = true;
 
     public SmokeBombLogic() {
-        super("Smoke Bomb", true, true);
-    }
-
-    @Override
-    public TargetMode getTargetMode() {
-        return TargetMode.SELF;
-    }
-
-    @Override
-    public void activate(Combatant user, Combatant target) {
-        requirePlayerUser(user);
-
-        // Smoke Bomb always affects the user
-        user.addStatusEffect(new StatusEffect(user, new SmokeBombEffect(), DURATION));
+        super(NAME, EFFECT_LOGIC, MAX_TARGET, EFFECT_SELF);
     }
 }
