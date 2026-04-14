@@ -19,6 +19,7 @@ public abstract class Combatant implements Comparable<Combatant>{
     private boolean active = true;//default = true, false if stunned. reset to true every turn and check again for stun
     private boolean invulnerable = false;//default = false, true if used smoke bomb. reset to false every turn
     private List<StatusEffect> statusList = new ArrayList<>();;
+    private List<Buff> buffList = new ArrayList<>();
     private List<Action> actionList = new ArrayList<>();;
     private int actionMeter = 0;
 
@@ -30,17 +31,22 @@ public abstract class Combatant implements Comparable<Combatant>{
         //might change new Logic to getInstance
     }
 
+    public void addBuff(Buff buff){
+        this.buffList.add(buff);
+    }
+
     /* == Useful Checks == */
     public String getName() {
         return combatType.getName();
     }
 
     /* == Getter == */
-    public int getStat(CombatStat stat){
-        int finalStat = combatType.getBaseStat(stat);
-        for (StatusEffect effect : statusList){
-            if (effect.getEffectLogic().getRelatedStat() == stat){//change so only 1 layer of method is used
-                finalStat += effect.getEffectLogic().getStatChange();
+    //might add map for buffs incurred by status effects (map each buff by associated stat type)
+    public int getStat(CombatStat statType){
+        int finalStat = combatType.getBaseStat(statType);
+        for (Buff buff : this.buffList){
+            if (buff.getType() == statType){//change so only 1 layer of method is used
+                finalStat += buff.getBuff;
             }
         }
         return finalStat;
