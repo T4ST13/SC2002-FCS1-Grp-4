@@ -4,7 +4,7 @@ import domain.actionlogic.ActionLogic;
 import domain.combatant.Combatant;
 import domain.statuseffect.StatusEffect;
 
-public class Action {
+public abstract class Action {
     private final Combatant user;
     private final ActionLogic actionLogic; // abit confusing, but actionLogic is just the name (alot of action logic -.-)
 
@@ -19,20 +19,17 @@ public class Action {
         return this.actionLogic.getName();
     }
 
-    public ActionLogic getActionLogic() {
-        return this.actionLogic;
-    }
-
     public Combatant getUser() {
         return this.user;
     }
 
-    public boolean isAvailable(){
-        return true;//basic Action like basic attack or defend are always available
+    public ActionLogic getActionLogic() {
+        return this.actionLogic;
     }
 
-    // Triggers action on target, NOT self 
-    public void trigger(Combatant target) {
+    public abstract boolean isAvailable();
+
+    public void use(Combatant target) {
         // If not avail e.g. maybe stunned
         if (!isAvailable()) {
             throw new IllegalStateException("Action '" + getName() + "' is not available for " + user.getName() + ".");

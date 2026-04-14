@@ -1,4 +1,6 @@
-package domain.combatant;
+package domain.unused;
+
+import domain.combatant.Enemy;
 
 public class Goblin extends Enemy {
     private static final String NAME = "Goblin";

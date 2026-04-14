@@ -1,4 +1,4 @@
-package domain;
+package domain.combatdata;
 
 public enum CombatStat {
     NONE,
@@ -6,5 +6,4 @@ public enum CombatStat {
     ATK,
     DEF,
     SPD;
-
 }

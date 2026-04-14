@@ -1,7 +1,8 @@
-package domain.combatant;
+package domain.unused;
 
 import domain.action.Skill;
 import domain.actionlogic.ShieldBashLogic;
+import domain.combatant.Player;
 
 public class Warrior extends Player {
     // Stats from brief

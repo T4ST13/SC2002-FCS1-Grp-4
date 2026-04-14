@@ -7,7 +7,7 @@ public abstract class SkillLogic extends ActionLogic {
     private static final int BASE_COOLDOWN = 3;//cd fixed to 3 for all skills (need to change if new skills have unique cd)
 
     protected SkillLogic(String name, StatusEffectLogic effectLogic, int maxTarget, boolean effectSelf) {
-        super(name, CONSUME_TURN, effectLogic, maxTarget, effectSelf);
+        super(name, CONSUME_TURN, effectLogic, maxTarget);
     }
 
     public int getBaseCooldown() {

@@ -1,13 +1,11 @@
-package domain;
+package domain.others;
 
-import domain.ConsoleUI;
 import domain.combatant.Combatant;
-import domain.combatant.Goblin;
-import domain.combatant.Wolf;
+import domain.unused.Goblin;
+import domain.unused.Wolf;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class MainController {
     public static void main(String[] args){

@@ -1,6 +1,6 @@
 package domain.statuseffect;
 
-import domain.TurnBasedCount;
+import domain.others.TurnBasedCount;
 import domain.combatant.Combatant;
 import domain.statuseffectlogic.StatusEffectLogic;
 //import domain.statuseffectlogic.StatusEffectLogic.TickPhase;
@@ -9,9 +9,9 @@ public class StatusEffect implements TurnBasedCount {
     private final StatusEffectLogic effectLogic;
     private int remainingTurns;
 
-    public StatusEffect(StatusEffectLogic effectLogic, int remainingTurns) {
+    public StatusEffect(StatusEffectLogic effectLogic) {
         this.effectLogic = effectLogic;
-        this.remainingTurns = remainingTurns;
+        this.remainingTurns = this.effectLogic.getBaseDuration();
     }
 
     /* == Getters == */

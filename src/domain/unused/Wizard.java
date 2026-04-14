@@ -1,7 +1,8 @@
-package domain.combatant;
+package domain.unused;
 
 import domain.actionlogic.ArcaneBlastLogic;
 import domain.action.Skill;
+import domain.combatant.Player;
 
 public class Wizard extends Player {
     private static final String NAME = "Wizard";

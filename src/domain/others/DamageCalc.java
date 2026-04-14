@@ -1,6 +1,7 @@
-package domain;
+package domain.others;
 
 import domain.combatant.Combatant;
+import domain.combatdata.CombatStat;
 
 public class DamageCalc {
     public static int calculate(Combatant attacker, Combatant target){

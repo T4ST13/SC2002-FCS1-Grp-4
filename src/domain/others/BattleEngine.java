@@ -1,4 +1,4 @@
-package domain;
+package domain.others;
 
 import domain.combatant.Combatant;
 

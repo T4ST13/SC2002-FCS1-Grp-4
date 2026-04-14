@@ -1,50 +1,45 @@
 package domain.combatant;
 
-import domain.TurnBasedCount;
+import domain.action.SharedAction;
+import domain.combatdata.CombatType;
+import domain.others.TurnBasedCount;
 import domain.action.Action;
 import domain.actionlogic.BasicAttackLogic;
 import domain.statuseffect.StatusEffect;
-import domain.CombatStat;
+import domain.combatdata.CombatStat;
 
 import java.util.*;
 
 // Shared by both Player & Enemy
 public abstract class Combatant implements Comparable<Combatant>{
-    private final String name;
-    private final HashMap<CombatStat, Integer> baseStats = new HashMap<CombatStat, Integer>();//HashMap doesn't accept primitive types (int -> Integer)
+//    private final String name;
+//    private final HashMap<CombatStat, Integer> baseStats = new HashMap<>();//HashMap doesn't accept primitive types (int -> Integer)
+    private final CombatType combatType;
     private int currentHP;
-    private boolean active;//default = true, false if stunned. reset to true every turn and check again for stun
-    private boolean invulnerable;//default = false, true if used smoke bomb. reset to false every turn
-    private List<StatusEffect> statusList;
-    private List<Action> actionList;
-    private int actionMeter;
+    private boolean active = true;//default = true, false if stunned. reset to true every turn and check again for stun
+    private boolean invulnerable = false;//default = false, true if used smoke bomb. reset to false every turn
+    private List<StatusEffect> statusList = new ArrayList<>();;
+    private List<Action> actionList = new ArrayList<>();;
+    private int actionMeter = 0;
 
     /* == Constructor for combatant == */
-    protected Combatant (String name, int baseHP, int baseAtk, int baseDef, int baseSpd) {
-        this.name = name;
-        baseStats.put(CombatStat.HP, baseHP);
-        baseStats.put(CombatStat.ATK, baseAtk);
-        baseStats.put(CombatStat.DEF, baseDef);
-        baseStats.put(CombatStat.SPD, baseSpd);
-        this.currentHP = baseHP; // Starts at max HP
-        this.active = true;
-        this.invulnerable = false;
-        this.statusList = new ArrayList<>();
-        this.actionList = new ArrayList<>();
-        this.actionList.add(new Action(this, new BasicAttackLogic()));//all subclasses of combatants can use basic attack
-        this.actionMeter = 0;
+    protected Combatant (CombatType combatType) {
+        this.combatType = combatType;
+        this.currentHP = combatType.getBaseStat(CombatStat.HP); // Starts at max HP
+        addAction(new SharedAction(this, new BasicAttackLogic()));//all subclasses of combatants can use basic attack
+        //might change new Logic to getInstance
     }
-    
+
     /* == Useful Checks == */
     public String getName() {
-        return name;
+        return combatType.getName();
     }
 
     /* == Getter == */
     public int getStat(CombatStat stat){
-        int finalStat = baseStats.get(stat);
+        int finalStat = combatType.getBaseStat(stat);
         for (StatusEffect effect : statusList){
-            if (effect.getEffectLogic().getRelatedStat() == stat){
+            if (effect.getEffectLogic().getRelatedStat() == stat){//change so only 1 layer of method is used
                 finalStat += effect.getEffectLogic().getStatChange();
             }
         }
@@ -79,6 +74,10 @@ public abstract class Combatant implements Comparable<Combatant>{
     public void addStatusEffect(StatusEffect effect) {
         this.statusList.add(effect);
     }
+    public void addAction(Action action) {
+        this.actionList.add(action);
+    }
+
 
     public void activateAllEffects() {
         for (StatusEffect effect : this.statusList){
@@ -126,8 +125,8 @@ public abstract class Combatant implements Comparable<Combatant>{
         this.currentHP = Math.min(this.getStat(CombatStat.HP), this.currentHP + amount);
     }
 
-    public void takeAction(int actionIndex, Combatant target) {
-        this.actionList.get(actionIndex).trigger(target);
+    public void useAction(int actionIndex, Combatant target) {
+        this.actionList.get(actionIndex).use(target);
     }
 
     @Override
@@ -135,3 +134,47 @@ public abstract class Combatant implements Comparable<Combatant>{
         return this.getStat(CombatStat.SPD) - other.getStat(CombatStat.SPD);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//original constructor
+//protected Combatant (String name, int baseHP, int baseAtk, int baseDef, int baseSpd) {
+//        this.name = name;
+//        baseStats.put(CombatStat.HP, baseHP);
+//        baseStats.put(CombatStat.ATK, baseAtk);
+//        baseStats.put(CombatStat.DEF, baseDef);
+//        baseStats.put(CombatStat.SPD, baseSpd);
+//        //organize with method
+//        this.currentHP = baseHP; // Starts at max HP
+//        this.active = true;
+//        this.invulnerable = false;
+//        this.statusList = new ArrayList<>();
+//        this.actionList = new ArrayList<>();
+//        addAction(new SharedAction(this, new BasicAttackLogic()));//all subclasses of combatants can use basic attack
+//        //might change to getInstance
+//        this.actionMeter = 0;
+//    }
+
+//original getter for stats
+//public int getStat(CombatStat stat){
+//    int finalStat = baseStats.get(stat);
+//    for (StatusEffect effect : statusList){
+//        if (effect.getEffectLogic().getRelatedStat() == stat){
+//            finalStat += effect.getEffectLogic().getStatChange();
+//        }
+//    }
+//    return finalStat;
+//}

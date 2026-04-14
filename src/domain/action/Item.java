@@ -1,28 +1,26 @@
 package domain.action;
 
 import domain.actionlogic.ItemLogic;
-import domain.combatant.Player;
+import domain.combatant.Combatant;
 
 public class Item extends Action {
     private int count;
 
     /* == Constructor == */
-    public Item(Player user, ItemLogic itemLogic) {
+    public Item(Combatant user, ItemLogic itemLogic) {
         super(user, itemLogic);
         count = 1;//new item made means it exists
     }
 
     /* == Getters == */
     public int getCount() {
-        return count;
+        return this.count;
     }
 
     /* == Setters == */
     public void changeCount(int change) {
-        count += change;
+        this.count += change;
     }
-    //positive change = count increase
-    //negative change = count decrease
 
     /* == Status == */
     @Override
@@ -31,4 +29,9 @@ public class Item extends Action {
     }
 
     /* == Use == */
+    @Override
+    public void use(Combatant target) {
+        super.use(target);
+        this.changeCount(-1);
+    }
 }

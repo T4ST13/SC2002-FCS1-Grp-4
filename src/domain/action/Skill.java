@@ -1,6 +1,7 @@
 package domain.action;
 
-import domain.TurnBasedCount;
+import domain.combatant.Combatant;
+import domain.others.TurnBasedCount;
 import domain.actionlogic.SkillLogic;
 import domain.combatant.Player;
 
@@ -8,7 +9,7 @@ public class Skill extends Action implements TurnBasedCount {
     private int remainingCd;
 
     /* == Constructor == */
-    public Skill(Player user, SkillLogic skillLogic) {//should we change Player user to Character user for expansiveness? (ex. enemy can also use skills)
+    public Skill(Combatant user, SkillLogic skillLogic) {
         super(user, skillLogic);
         this.remainingCd = skillLogic.getBaseCooldown();
     }
@@ -30,6 +31,4 @@ public class Skill extends Action implements TurnBasedCount {
     public boolean isAvailable() {//checks whether skill can be used
         return remainingCd == 0;
     }
-
-    /* == Use == */
 }

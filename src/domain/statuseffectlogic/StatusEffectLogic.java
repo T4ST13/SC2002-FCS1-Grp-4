@@ -1,6 +1,6 @@
 package domain.statuseffectlogic;
 
-import domain.CombatStat;
+import domain.combatdata.CombatStat;
 import domain.combatant.Combatant;
 
 public abstract class StatusEffectLogic {
