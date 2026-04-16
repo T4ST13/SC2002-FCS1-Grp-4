@@ -1,44 +1,51 @@
 package domain.actionlogic;
 
-import domain.actionlogic.mechanism.CombatMechanism;
 import domain.combatant.Combatant;
+import domain.combatmechanism.CombatMechanism;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ActionLogic {
+public abstract class ActionLogic{
 
-    private final String NAME;
+    ActionLogicType logicType;
     private final boolean consumeTurn;
-    //private final StatusEffectLogic selfEffect, targetEffect;
-    private final int maxTarget;//maxTarget = -1 for self target skills, maxTarget = 0 for skills that target all enemies
-    private List<CombatMechanism> mechanisms;
-    //private final boolean selfEffect, targetEffect;
-    //true = status effect associated with the action is applied to the user, not the target (ex. ArcaneBlast)
-    //false = status effect of the action is applied to a target (ex. ShieldBash) or the action doesn't have a status effect
 
-    protected ActionLogic(String NAME, boolean consumeTurn, int maxTarget, List<CombatMechanism> mechanisms) {
-        this.NAME = NAME;
+    protected ActionLogic(ActionLogicType logicType, boolean consumeTurn) {//might need to include consumeTurn into enum
+        this.logicType = logicType;
         this.consumeTurn = consumeTurn;
-        this.maxTarget = maxTarget;
-        this.mechanisms = mechanisms;
     }
 
     /* == Getters == */
+    public ActionLogicType getLogicType(){
+        return logicType;
+    }
     public String getName() {
-        return this.NAME;
+        return this.logicType.getName();
     }
 
     public boolean isConsumeTurn() {
         return this.consumeTurn;
     }
 
-    public int getMaxTarget() {
-        return this.maxTarget;
+    public boolean needsTarget(Combatant user) {
+        for (CombatMechanism mechanism : logicType.getMechanismList()){
+            if (mechanism.needsTarget(user)){
+                return true;
+            }
+        }
+        return false;
+        //return this.logicType.needsTarget(user);
     }
 
-    public void activate(Combatant user, Combatant target) {
-        for (CombatMechanism mech : this.mechanisms) {
-            mech.execute(user, target);
+    public /*List<String>*/ void activate(Combatant user, Combatant target) {
+//        List<String> messages = new ArrayList<>();
+//        for (CombatMechanism mechanism : this.logicType.getMechanismList()) {
+//            messages.add(mechanism.execute(user, target));
+//        }
+//        return messages;
+        for (CombatMechanism mechanism : this.logicType.getMechanismList()) {
+            mechanism.execute(user, target);
         }
     }
 }
@@ -50,6 +57,26 @@ public abstract class ActionLogic {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+//original constructor
+//    protected ActionLogic(String NAME, boolean consumeTurn, int maxTarget, List<CombatMechanism> mechanisms) {
+//        this.NAME = NAME;
+//        this.consumeTurn = consumeTurn;
+//        this.maxTarget = maxTarget;
+//        this.mechanisms = mechanisms;
+//    }
 
 //    public void applyEffect(Combatant target){
 //        if (this.effectLogic != null) {

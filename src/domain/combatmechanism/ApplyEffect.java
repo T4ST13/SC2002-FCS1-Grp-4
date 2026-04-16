@@ -1,25 +1,27 @@
-package domain.actionlogic.mechanism;
+package domain.combatmechanism;
 
+import domain.battleengine.BattleEngine;
 import domain.combatant.Combatant;
 import domain.statuseffect.StatusEffect;
-import domain.statuseffectlogic.StatusEffectLogic;
+import domain.effectlogic.EffectLogic;
 
 public class ApplyEffect extends TargetableMechanism{
 
-    private final StatusEffectLogic effectLogic;
+    private final EffectLogic effectLogic;
 
-    public ApplyEffect(TargetMode targetMode, int maxTarget, StatusEffectLogic effectLogic){
-        super(targetMode, maxTarget);
+    public ApplyEffect(TargetMode targetMode, int maxTarget, int area, EffectLogic effectLogic){
+        super(targetMode, maxTarget, area);
         this.effectLogic = effectLogic;
     }
 
     @Override
-    public void execute(Combatant user, Combatant target){
-        if (this.getTargetMode() == TargetMode.TARGET){
-            target.addStatusEffect(new StatusEffect(this.effectLogic));
-        }
-        else{
-            user.addStatusEffect(new StatusEffect(this.effectLogic));
-        }
+    public /*String*/ void execute(Combatant user, Combatant target){
+        Combatant realTarget = this.getRealTarget(user, target);
+        realTarget.addStatusEffect(new StatusEffect(effectLogic, user));
+        String message = String.format("%s applied to %s", effectLogic.getName(), realTarget.getName());
+        //target.addStatusEffect(new StatusEffect(effectLogic, user));
+        //String message = String.format("%s applied to %s", effectLogic.getName(), target.getName());
+        BattleEngine.logAction(message);
+        //return String.format("%s applied to %s", effectLogic.getName(), target.getName());
     }
 }

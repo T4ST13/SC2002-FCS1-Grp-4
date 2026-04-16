@@ -1,12 +1,15 @@
 package domain.action;
 
 import domain.actionlogic.ActionLogic;
+import domain.battleengine.BattleEngine;
 import domain.combatant.Combatant;
-import domain.statuseffect.StatusEffect;
+import domain.displayable.Displayable;
 
-public abstract class Action {
+import java.util.List;
+
+public abstract class Action implements Displayable {
     private final Combatant user;
-    private final ActionLogic actionLogic; // abit confusing, but actionLogic is just the name (alot of action logic -.-)
+    private final ActionLogic actionLogic;
 
     /* == Constructor == */ 
     public Action(Combatant user, ActionLogic actionLogic) {
@@ -16,26 +19,43 @@ public abstract class Action {
 
     /* Getters */
     public String getName() {
-        return this.actionLogic.getName();
+        return actionLogic.getName();
+    }
+
+    public boolean isConsumeTurn() {
+        return actionLogic.isConsumeTurn();
+    }
+
+    public boolean needsTarget() {
+        return actionLogic.needsTarget(user);
     }
 
     public Combatant getUser() {
-        return this.user;
+        return user;
     }
 
     public ActionLogic getActionLogic() {
-        return this.actionLogic;
+        return actionLogic;
     }
 
     public abstract boolean isAvailable();
 
-    public void use(Combatant target) {
+    public abstract String getUnavailableMessage();
+
+    public /*List<String>*/ void use(Combatant target) {
+//        // If not avail e.g. maybe stunned
+//        if (!isAvailable()) {
+//            return Arrays.asList(getUnavailableMessage());
+//        }
+//        // Activate action
+//        return actionLogic.activate(user, target);
+//        //might change to let battle engine pass user and delete user attribute in this class
         // If not avail e.g. maybe stunned
         if (!isAvailable()) {
-            throw new IllegalStateException("Action '" + getName() + "' is not available for " + user.getName() + ".");
+            BattleEngine.logAction(getUnavailableMessage());
         }
         // Activate action
-        this.actionLogic.activate(this.user, target);
+        actionLogic.activate(user, target);
         //might change to let battle engine pass user and delete user attribute in this class
     }
 }

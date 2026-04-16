@@ -1,7 +1,9 @@
-package domain.actionlogic.mechanism;
+package domain.combatmechanism;
 
 import domain.combatant.Combatant;
 
 public interface CombatMechanism {
-    public void execute(Combatant user, Combatant target);
+    public /*String*/ void execute(Combatant user, Combatant target);
+
+    public abstract boolean needsTarget(Combatant user);
 }

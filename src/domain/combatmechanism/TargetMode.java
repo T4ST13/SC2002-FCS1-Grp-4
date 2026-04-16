@@ -1,4 +1,4 @@
-package domain.actionlogic.mechanism;
+package domain.combatmechanism;
 
 public enum TargetMode{
     SELF,
