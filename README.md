@@ -1,4 +1,8 @@
 # SC2002-FCS1-Grp-4
+## UML Class Diagram
+Link: 
+## UML Sequence Diagram
+Link: 
 ## Declaration on GAI use
 Link: https://github.com/T4ST13/SC2002-FCS1-Grp-4/tree/main/FCS1_Grp4/Declaration%20on%20Use%20of%20GAI
 ## Collaborators
