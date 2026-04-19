@@ -2,7 +2,7 @@ package domain.battle;
 
 import domain.entity.Combatant;
 import domain.entity.CombatStat;
-import domain.displayable.Displayable;
+import ui.displayable.Displayable;
 
 import java.util.ArrayList;
 import java.util.Collections;

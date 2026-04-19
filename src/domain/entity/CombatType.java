@@ -1,6 +1,6 @@
 package domain.entity;
 
-import domain.displayable.Displayable;
+import ui.displayable.Displayable;
 
 import java.util.HashMap;
 import java.util.Map;

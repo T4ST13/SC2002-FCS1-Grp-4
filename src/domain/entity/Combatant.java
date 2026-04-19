@@ -6,7 +6,7 @@ import domain.action.logic.ActionLogicType;
 import domain.action.logic.ItemLogic;
 import domain.action.logic.SharedActionLogic;
 import domain.effect.Flag;
-import domain.displayable.Displayable;
+import ui.displayable.Displayable;
 import domain.util.TurnBasedCount;
 import domain.action.Action;
 import domain.effect.StatusEffect;

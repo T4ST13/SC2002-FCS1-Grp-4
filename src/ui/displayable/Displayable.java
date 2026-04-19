@@ -1,4 +1,4 @@
-package domain.displayable;
+package ui.displayable;
 
 public interface Displayable {
     String getDisplayFormat();

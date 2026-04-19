@@ -1,6 +1,6 @@
 package ui;
 
-import domain.displayable.Displayable;
+import ui.displayable.Displayable;
 
 import java.util.List;
 import java.util.Scanner;

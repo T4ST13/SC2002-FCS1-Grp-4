@@ -3,7 +3,7 @@ package domain.level;
 import domain.entity.Combatant;
 import domain.entity.Enemy;
 import domain.entity.CombatType;
-import domain.displayable.Displayable;
+import ui.displayable.Displayable;
 
 import java.util.Arrays;
 import java.util.List;

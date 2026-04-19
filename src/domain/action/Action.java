@@ -4,7 +4,7 @@ import domain.action.logic.ActionLogic;
 import domain.battle.BattleEngine;
 import domain.entity.Combatant;
 import domain.action.mechanism.CombatMechanism;
-import domain.displayable.Displayable;
+import ui.displayable.Displayable;
 
 import java.util.ArrayList;
 import java.util.List;

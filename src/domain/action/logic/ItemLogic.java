@@ -1,6 +1,6 @@
 package domain.action.logic;
 
-import domain.displayable.Displayable;
+import ui.displayable.Displayable;
 
 public class ItemLogic extends ActionLogic implements Displayable {
     private static final boolean CONSUME_TURN = false;//consumeTurn fixed to false for all items
