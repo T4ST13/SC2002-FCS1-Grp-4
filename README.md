@@ -1,5 +1,7 @@
 # SC2002-FCS1-Grp-4
 Links to specific folders will be shown below for easy viewing.
+## Main Report
+Link: https://github.com/T4ST13/SC2002-FCS1-Grp-4/tree/main/FCS1_Grp4/Main%20Report 
 ## UML Class Diagram
 Link: https://github.com/T4ST13/SC2002-FCS1-Grp-4/tree/main/FCS1_Grp4/UML%20Class%20Diagram 
 ## UML Sequence Diagram
