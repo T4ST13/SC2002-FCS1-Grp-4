@@ -1,20 +1,25 @@
 package domain.action;
 
-import domain.actionlogic.ActionLogic;
-import domain.battleengine.BattleEngine;
-import domain.combatant.Combatant;
+import domain.action.logic.ActionLogic;
+import domain.battle.BattleEngine;
+import domain.entity.Combatant;
+import domain.action.mechanism.CombatMechanism;
 import domain.displayable.Displayable;
 
+import java.util.ArrayList;
 import java.util.List;
 
+//holds logic for an action + attributes unique to each action
 public abstract class Action implements Displayable {
     private final Combatant user;
     private final ActionLogic actionLogic;
+    private List<CombatMechanism> mechanismList;
 
     /* == Constructor == */ 
-    public Action(Combatant user, ActionLogic actionLogic) {
+    protected Action(Combatant user, ActionLogic actionLogic) {
         this.user = user;
         this.actionLogic = actionLogic;
+        this.mechanismList = new ArrayList<>(actionLogic.getLogicType().getMechanismList());
     }
 
     /* Getters */
@@ -38,24 +43,26 @@ public abstract class Action implements Displayable {
         return actionLogic;
     }
 
+    public void addMechanism(CombatMechanism mechanism){
+        mechanismList.add(mechanism);
+    }
+
+    public void resetMechanism(){
+        mechanismList = new ArrayList<>(actionLogic.getLogicType().getMechanismList());
+    }
+
+    public void use(Combatant target) {
+        if (!isAvailable()) {
+            BattleEngine.logAction(getUnavailableMessage());
+            return;
+        }
+        for (CombatMechanism mechanism : mechanismList) {
+            mechanism.execute(user, target);
+        }
+        this.resetMechanism();
+    }
+
     public abstract boolean isAvailable();
 
     public abstract String getUnavailableMessage();
-
-    public /*List<String>*/ void use(Combatant target) {
-//        // If not avail e.g. maybe stunned
-//        if (!isAvailable()) {
-//            return Arrays.asList(getUnavailableMessage());
-//        }
-//        // Activate action
-//        return actionLogic.activate(user, target);
-//        //might change to let battle engine pass user and delete user attribute in this class
-        // If not avail e.g. maybe stunned
-        if (!isAvailable()) {
-            BattleEngine.logAction(getUnavailableMessage());
-        }
-        // Activate action
-        actionLogic.activate(user, target);
-        //might change to let battle engine pass user and delete user attribute in this class
-    }
 }

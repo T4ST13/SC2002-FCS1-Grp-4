@@ -1,11 +1,10 @@
 package domain.action;
 
-import domain.combatant.Combatant;
-import domain.TurnBasedCount;
-import domain.actionlogic.SkillLogic;
+import domain.entity.Combatant;
+import domain.util.TurnBasedCount;
+import domain.action.logic.SkillLogic;
 
-import java.util.List;
-
+//
 public class Skill extends Action implements TurnBasedCount{
     private int remainingCd;
 
@@ -26,6 +25,7 @@ public class Skill extends Action implements TurnBasedCount{
         return remainingCd == 0;
     }
 
+    @Override
     public void passTurn(){//for decreasing skill cd when turn passes
         if (remainingCd > 0) {//disable negative cooldowns
             remainingCd--;
@@ -36,11 +36,13 @@ public class Skill extends Action implements TurnBasedCount{
         this.remainingCd = ((SkillLogic)this.getActionLogic()).getBaseCd();
     }
 
+    @Override
     public String getUnavailableMessage(){
         return getActionLogic().getName() + " unavailable. "
                 + remainingCd + " turns left until cooldown.";
     }
 
+    @Override
     public String getDisplayFormat(){
         if (isAvailable()) {
             return String.format("%s (Ready)", getName());
@@ -50,10 +52,9 @@ public class Skill extends Action implements TurnBasedCount{
         }
     }
 
-    public /*List<String>*/ void use(Combatant target) {
-        //List<String> messages = super.use(target);
+    @Override
+    public void use(Combatant target) {
         super.use(target);
         this.resetCd();
-        //return messages;
     }
 }

@@ -1,7 +1,7 @@
 package domain.action;
 
-import domain.actionlogic.SharedActionLogic;
-import domain.combatant.Combatant;
+import domain.action.logic.SharedActionLogic;
+import domain.entity.Combatant;
 
 public class SharedAction extends Action{
     /* == Constructor == */

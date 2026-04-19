@@ -1,10 +1,9 @@
 package domain.action;
 
-import domain.actionlogic.ItemLogic;
-import domain.combatant.Combatant;
+import domain.action.logic.ItemLogic;
+import domain.entity.Combatant;
 
-import java.util.List;
-
+//holds item specific attributes and methods like count
 public class Item extends Action {
     private int count;
 
@@ -31,24 +30,23 @@ public class Item extends Action {
     }
     //will always be true since the item option will not be available if count<1 in the first place
 
+    @Override
     public String getUnavailableMessage(){
         return "Not enough " + getName() + " in inventory";
-        //might change to null since unavailableMessage will never be used for Item objects
     }
 
+    @Override
     public String getDisplayFormat(){
         return String.format("%s (%d left)", getName(), count);
     }
 
     /* == Use == */
     @Override
-    public /*List<String>*/ void use(Combatant target) {
-        //List<String> messages = super.use(target);
+    public void use(Combatant target) {
         super.use(target);
         this.changeCount(-1);
         if (!isAvailable()){
             getUser().removeItem(this);
         }
-        //return messages;
     }
 }
